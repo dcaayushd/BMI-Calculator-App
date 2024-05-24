@@ -1,53 +1,28 @@
-// import 'package:flutter/material.dart';
-// import 'screens/home_screen.dart';
-// import 'themes/app_theme.dart';
-
-// void main() {
-//   runApp(const BMICalculatorApp());
-// }
-
-// class BMICalculatorApp extends StatelessWidget {
-//   const BMICalculatorApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'BMI Calculator',
-//       theme: AppTheme.lightTheme,
-//       home: const HomeScreen(),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
-import 'screens/bmi_form.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'screens/home_screen.dart';
+import 'utils/app_styles.dart';
 
 void main() {
-  runApp(BMICalculatorApp());
+  runApp(const BMICalculatorApp());
 }
 
-class BMICalculatorApp extends StatefulWidget {
-  @override
-  _BMICalculatorAppState createState() => _BMICalculatorAppState();
-}
-
-class _BMICalculatorAppState extends State<BMICalculatorApp> {
-  ThemeData _themeData = ThemeData.light();
-
-  void _changeTheme(ThemeData theme) {
-    setState(() {
-      _themeData = theme;
-    });
-  }
+class BMICalculatorApp extends StatelessWidget {
+  const BMICalculatorApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BMI Calculator',
-      theme: _themeData,
-      home: BMIForm(changeTheme: _changeTheme),
+      theme: ThemeData(
+        textTheme: GoogleFonts.openSansTextTheme(),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppStyles.primaryColor,
+        ),
+      ),
+      home: const HomeScreen(),
     );
   }
 }
