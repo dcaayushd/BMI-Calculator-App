@@ -1,27 +1,22 @@
+import 'package:bmi_calculator/constants/theme.dart';
+import 'package:bmi_calculator/Screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import 'screens/home_screen.dart';
-import 'utils/app_styles.dart';
+import 'package:get/get.dart';
 
 void main() {
-  runApp(const BMICalculatorApp());
+  runApp(const MyApp());
 }
 
-class BMICalculatorApp extends StatelessWidget {
-  const BMICalculatorApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'BMI Calculator',
-      theme: ThemeData(
-        textTheme: GoogleFonts.openSansTextTheme(),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: AppStyles.primaryColor,
-        ),
-      ),
+      title: 'BMI CALCULATOR',
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home: const HomeScreen(),
     );
   }
