@@ -1,151 +1,101 @@
+import 'package:bmi_calculator/Components/age_selector.dart';
+import 'package:bmi_calculator/Components/height_selector.dart';
+import 'package:bmi_calculator/Components/primary_button.dart';
+import 'package:bmi_calculator/Components/ract_button.dart';
+import 'package:bmi_calculator/Components/weight_selector.dart';
+import 'package:bmi_calculator/Controllers/bmi_controller.dart';
+import 'package:bmi_calculator/Screens/result_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../models/bmi_calculation.dart';
-// import '../utils/app_colors.dart';
-import '../utils/app_styles.dart';
-import '../utils/bmi_constants.dart';
-import '../utils/helpers.dart';
-import '../widgets/age_weight_height_input.dart';
-import '../widgets/bmi_card.dart';
-import '../widgets/gender_selector.dart';
-import '../widgets/measurement_selector.dart';
+import '../Components/theme_change_btn.dart';
+// import '../Config/colors.dart';
+// import '../Controllers/theme_controller.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  Gender? selectedGender;
-  MeasurementSystem? measurementSystem;
-  int age = 25;
-  int weight = 60;
-  int height = 170;
-
-  BMICalculation? bmiCalculation;
-
-  void updateBMI() {
-    final heightInMeters = measurementSystem == MeasurementSystem.metric
-        ? (height / 100.0)
-        : heightInCmFromFeetInches(height) / 100.0;
-
-    final weightInKg = measurementSystem == MeasurementSystem.metric
-        ? weight.toDouble()
-        : weightInKgFromPounds(weight);
-
-    if (selectedGender != null) {
-      final bmi = BMICalculation(
-        age: age,
-        gender: selectedGender!,
-        heightInMeters: heightInMeters,
-        weightInKg: weightInKg,
-      );
-
-      setState(() {
-        bmiCalculation = bmi;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    BMIController bmiController = Get.put(BMIController());
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BMI Calculator'),
-      ),
+      // backgroundColor:  ? dBgColor : lBgColor,
       body: SafeArea(
-        child: Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              Expanded(
+              const ThemeChangeBtn(),
+              Row(
+                children: [
+                  Text(
+                    "Welcome 😊",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "BMI Calculator",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  PrimaryButton(
+                    onPress: () {
+                      bmiController.genderHandle("MALE");
+                    },
+                    icon: Icons.male,
+                    btnName: "MALE",
+                  ),
+                  const SizedBox(width: 20),
+                  PrimaryButton(
+                    onPress: () {
+                      bmiController.genderHandle("FEMALE");
+                    },
+                    icon: Icons.female,
+                    btnName: "FEMALE",
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Expanded(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    BMICard(
-                      child: GenderSelector(
-                        onGenderSelected: (gender) {
-                          setState(() {
-                            selectedGender = gender;
-                            updateBMI();
-                          });
-                        },
+                    HeightSelector(),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          WeightSelector(),
+                          AgeSelector(),
+                        ],
                       ),
-                    ),
-                    BMICard(
-                      child: MeasurementSelector(
-                        onMeasurementSystemSelected: (system) {
-                          setState(() {
-                            measurementSystem = system;
-                            updateBMI();
-                          });
-                        },
-                      ),
-                    ),
+                    )
                   ],
                 ),
               ),
-              BMICard(
-                child: AgeWeightHeightInput(
-                  age: age,
-                  weight: weight,
-                  height: height,
-                  measurementSystem: measurementSystem,
-                  onAgeChanged: (value) {
-                    setState(() {
-                      age = value;
-                      updateBMI();
-                    });
-                  },
-                  onWeightChanged: (value) {
-                    setState(() {
-                      weight = value;
-                      updateBMI();
-                    });
-                  },
-                  onHeightChanged: (value) {
-                    setState(() {
-                      height = value;
-                      updateBMI();
-                    });
-                  },
-                ),
-              ),
-              if (bmiCalculation != null)
-                Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Card(
-                      color: bmiCalculation!.bmiCategory.color,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'Your BMI'.toUpperCase(),
-                                style: AppStyles.headingTextStyle,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                bmiCalculation!.bmi.toStringAsFixed(1),
-                                style: AppStyles.valueTextStyle,
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                bmiCalculation!.bmiCategory.description,
-                                style: AppStyles.bodyTextStyle,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              const SizedBox(height: 20),
+              MyRactButton(
+                onPress: () {
+                  bmiController.calculateBMI();
+                  Get.to(() => const ResultScreen());
+                },
+                icon: Icons.calculate_rounded,
+                btnName: "CALCULATE BMI",
+              )
             ],
           ),
         ),
