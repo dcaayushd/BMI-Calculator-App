@@ -19,7 +19,7 @@ The BMI Calculator App is a simple and user-friendly tool for calculating your B
 
 To get started with the BMI Calculator App, follow these steps:
 
-    - Clone the repository: `git clone https://github.com/yourusername/bmi_calculator.git`
+    - Clone the repository: `git clone https://github.com/dcaayushd/BMI-Calculator-App.git`
 
     - Navigate to the project directory: `cd bmi_calculator`
 
